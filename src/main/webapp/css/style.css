@@ -1,0 +1,9 @@
+body{
+background-color: yellow;
+}
+
+.login-wrapper{
+
+    max-width: 43vh;
+    padding-top: 20px;
+}

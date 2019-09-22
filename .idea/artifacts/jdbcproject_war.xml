@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" build-on-make="true" name="jdbcproject:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="taxi.war">
+      <element id="artifact" artifact-name="jdbcproject:war exploded" />
+    </root>
+  </artifact>
+</component>
