@@ -20,7 +20,7 @@
         <tr>
             <th>car class</th>
         </tr>
-        <c:forEach var="car" items="${cars}">
+        <c:forEach var="car" items="${taxis}">
             <tr>
                 <td><c:out value="${car.carClass}"/>
 

@@ -15,31 +15,39 @@
     <schema id="9" parent="1" name="world"/>
     <table id="10" parent="3" name="action"/>
     <table id="11" parent="3" name="booking"/>
-    <table id="12" parent="3" name="car_user"/>
-    <table id="13" parent="3" name="streets"/>
-    <table id="14" parent="3" name="taxi"/>
-    <table id="15" parent="3" name="taxi_ride"/>
-    <table id="16" parent="3" name="user_action"/>
-    <table id="17" parent="3" name="users"/>
-    <column id="18" parent="10" name="id">
+    <table id="12" parent="3" name="streets"/>
+    <table id="13" parent="3" name="taxi"/>
+    <table id="14" parent="3" name="taxi_ride"/>
+    <table id="15" parent="3" name="user_action"/>
+    <table id="16" parent="3" name="users"/>
+    <column id="17" parent="10" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="19" parent="10" name="discount">
+    <column id="18" parent="10" name="discount">
       <Position>2</Position>
       <DataType>DECIMAL(3)|3</DataType>
     </column>
-    <column id="20" parent="10" name="userId">
+    <column id="19" parent="10" name="userId">
       <Position>3</Position>
       <DataType>INT(10)|4</DataType>
     </column>
-    <key id="21" parent="10" name="PRIMARY">
+    <key id="20" parent="10" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
+    <foreign-key id="21" parent="10" name="userfk">
+      <ColNames>userId</ColNames>
+      <RefSchemaName>jdbc</RefSchemaName>
+      <RefTableName>users</RefTableName>
+      <RefKeyName>PRIMARY</RefKeyName>
+      <RefColNames>id</RefColNames>
+      <OnUpdate>no-action</OnUpdate>
+      <OnDelete>no-action</OnDelete>
+    </foreign-key>
     <column id="22" parent="11" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
@@ -81,115 +89,87 @@
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="30" parent="12" name="user_id">
-      <Position>1</Position>
-      <DataType>INT(10)|4</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <column id="31" parent="12" name="car_id">
-      <Position>2</Position>
-      <DataType>INT(10)|4</DataType>
-      <NotNull>1</NotNull>
-    </column>
-    <foreign-key id="32" parent="12" name="UserFK">
-      <ColNames>user_id</ColNames>
-      <RefSchemaName>jdbc</RefSchemaName>
-      <RefTableName>users</RefTableName>
-      <RefKeyName>PRIMARY</RefKeyName>
-      <RefColNames>id</RefColNames>
-      <OnUpdate>no-action</OnUpdate>
-      <OnDelete>no-action</OnDelete>
-    </foreign-key>
-    <foreign-key id="33" parent="12" name="CarFK">
-      <ColNames>car_id</ColNames>
-      <RefSchemaName>jdbc</RefSchemaName>
-      <RefTableName>taxi</RefTableName>
-      <RefKeyName>PRIMARY</RefKeyName>
-      <RefColNames>id</RefColNames>
-      <OnUpdate>no-action</OnUpdate>
-      <OnDelete>no-action</OnDelete>
-    </foreign-key>
-    <column id="34" parent="13" name="id">
+    <column id="30" parent="12" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="35" parent="13" name="streetName">
+    <column id="31" parent="12" name="streetName">
       <Position>2</Position>
       <DataType>VARCHAR(45)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="36" parent="13" name="PRIMARY">
+    <key id="32" parent="12" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="37" parent="14" name="id">
+    <column id="33" parent="13" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="38" parent="14" name="class">
+    <column id="34" parent="13" name="class">
       <Position>2</Position>
       <DataType>VARCHAR(45)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="39" parent="14" name="curr_pos">
+    <column id="35" parent="13" name="curr_pos">
       <Position>3</Position>
       <DataType>VARCHAR(45)|12</DataType>
     </column>
-    <column id="40" parent="14" name="is_free">
+    <column id="36" parent="13" name="is_free">
       <Position>4</Position>
       <DataType>TINYINT(3)|-6</DataType>
     </column>
-    <index id="41" parent="14" name="StreetFK_idx">
+    <index id="37" parent="13" name="StreetFK_idx">
       <ColNames>curr_pos</ColNames>
     </index>
-    <key id="42" parent="14" name="PRIMARY">
+    <key id="38" parent="13" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="43" parent="15" name="id">
+    <column id="39" parent="14" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="44" parent="15" name="start_address">
+    <column id="40" parent="14" name="start_address">
       <Position>2</Position>
       <DataType>VARCHAR(100)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="45" parent="15" name="end_address">
+    <column id="41" parent="14" name="end_address">
       <Position>3</Position>
       <DataType>VARCHAR(100)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="46" parent="15" name="km">
+    <column id="42" parent="14" name="km">
       <Position>4</Position>
       <DataType>DECIMAL(3)|3</DataType>
     </column>
-    <column id="47" parent="15" name="coef">
+    <column id="43" parent="14" name="coef">
       <Position>5</Position>
       <DataType>DECIMAL(3)|3</DataType>
     </column>
-    <column id="48" parent="15" name="start_id">
+    <column id="44" parent="14" name="start_id">
       <Position>6</Position>
       <DataType>INT(10)|4</DataType>
     </column>
-    <column id="49" parent="15" name="dest_id">
+    <column id="45" parent="14" name="dest_id">
       <Position>7</Position>
       <DataType>INT(10)|4</DataType>
     </column>
-    <key id="50" parent="15" name="PRIMARY">
+    <key id="46" parent="14" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="51" parent="15" name="sfk">
+    <foreign-key id="47" parent="14" name="sfk">
       <ColNames>start_id</ColNames>
       <RefSchemaName>jdbc</RefSchemaName>
       <RefTableName>streets</RefTableName>
@@ -198,7 +178,7 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <foreign-key id="52" parent="15" name="dfk">
+    <foreign-key id="48" parent="14" name="dfk">
       <ColNames>dest_id</ColNames>
       <RefSchemaName>jdbc</RefSchemaName>
       <RefTableName>streets</RefTableName>
@@ -207,34 +187,34 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <column id="53" parent="16" name="id">
+    <column id="49" parent="15" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="54" parent="16" name="user">
+    <column id="50" parent="15" name="user">
       <Position>2</Position>
       <DataType>VARCHAR(45)|12</DataType>
     </column>
-    <column id="55" parent="16" name="action">
+    <column id="51" parent="15" name="action">
       <Position>3</Position>
       <DataType>VARCHAR(45)|12</DataType>
     </column>
-    <column id="56" parent="16" name="user_id">
+    <column id="52" parent="15" name="user_id">
       <Position>4</Position>
       <DataType>INT(10)|4</DataType>
     </column>
-    <column id="57" parent="16" name="action_id">
+    <column id="53" parent="15" name="action_id">
       <Position>5</Position>
       <DataType>INT(10)|4</DataType>
     </column>
-    <key id="58" parent="16" name="PRIMARY">
+    <key id="54" parent="15" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="59" parent="16" name="ufk">
+    <foreign-key id="55" parent="15" name="ufk">
       <ColNames>user_id</ColNames>
       <RefSchemaName>jdbc</RefSchemaName>
       <RefTableName>users</RefTableName>
@@ -243,7 +223,7 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <foreign-key id="60" parent="16" name="afk">
+    <foreign-key id="56" parent="15" name="afk">
       <ColNames>action_id</ColNames>
       <RefSchemaName>jdbc</RefSchemaName>
       <RefTableName>action</RefTableName>
@@ -252,28 +232,28 @@
       <OnUpdate>no-action</OnUpdate>
       <OnDelete>no-action</OnDelete>
     </foreign-key>
-    <column id="61" parent="17" name="id">
+    <column id="57" parent="16" name="id">
       <Position>1</Position>
       <DataType>INT(10)|4</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
     </column>
-    <column id="62" parent="17" name="user_email">
+    <column id="58" parent="16" name="user_email">
       <Position>2</Position>
       <DataType>VARCHAR(45)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="63" parent="17" name="user_name">
+    <column id="59" parent="16" name="user_name">
       <Position>3</Position>
       <DataType>VARCHAR(45)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <column id="64" parent="17" name="user_password">
+    <column id="60" parent="16" name="user_password">
       <Position>4</Position>
       <DataType>VARCHAR(45)|12</DataType>
       <NotNull>1</NotNull>
     </column>
-    <key id="65" parent="17" name="PRIMARY">
+    <key id="61" parent="16" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>

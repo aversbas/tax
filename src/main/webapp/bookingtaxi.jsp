@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jstl/fmt" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jstl/sql" %>
 
 <%--
   Created by IntelliJ IDEA.
@@ -47,7 +48,6 @@
 
                     Select where do you want to go
                     <select name="dest">
-
                         <c:forEach var="street" items="${streets}">
                             <option><c:out value="${street.name}"/></option>
                         </c:forEach>
@@ -60,14 +60,12 @@
                     <%--    </c:forEach>--%>
                     <%--</select>--%>  <%-- MAYBE MAKE TABLE OF AVAILABLE CARS WITH ALL THEIR ATTRIBUTES    -->   OR MAKE RADIO BUTTONS--%>
 
-                    <select name="carClass">
-
+                    <select name="car">
                         <c:forEach var="taxi" items="${taxis}">
                             <option><c:out value="${taxi.carClass}"/></option>
                         </c:forEach>
                     </select>
 
-                    </select>
                     <input type="submit" value="submit">
                 </form>
 

@@ -1,6 +1,7 @@
 package dao.daoImpl;
 
 import dao.ConnectionFactory;
+import dao.PersistException;
 import dao.idao.*;
 import entyties.*;
 import org.apache.log4j.Logger;
@@ -99,7 +100,12 @@ public class BookingDaoImpl implements IBookingDao {
                 Action action = actionDao.getUserAction(user);
                 int actionId = rs.getInt(5);
 
-                UserAction userAction = userActionDao.getUserActionByAction(action);
+                UserAction userAction = null;
+                try {
+                    userAction = userActionDao.getUserActionByAction(action);
+                } catch (PersistException e) {
+                    e.printStackTrace();
+                }
                 int carId = rs.getInt(6);
 
                 Taxi taxi = carDao.getCarById(carId);

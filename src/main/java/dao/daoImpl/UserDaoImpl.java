@@ -1,6 +1,7 @@
 package dao.daoImpl;
 
 import dao.ConnectionFactory;
+import dao.PersistException;
 import dao.idao.IUserDao;
 import entyties.User;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -19,9 +21,30 @@ public class UserDaoImpl implements IUserDao {
 
     Logger log = Logger.getLogger(UserDaoImpl.class);
 
-    @Override
-    public User getUserById(long id) {
+    public String getSelectQuery() {return "SELECT * FROM users";}
 
+    public List<User> parseResultSet(ResultSet rs) throws PersistException {
+
+        LinkedList<User> result = new LinkedList<>();
+        try {
+            while (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getLong("id"));
+                user.setUserName(rs.getString("user_name"));
+                user.setUserMail(rs.getString("user_email"));
+
+                result.add(user);
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public User getUserById(long id) throws PersistException {
+
+        List<User> users = new ArrayList<User>();
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -29,18 +52,20 @@ public class UserDaoImpl implements IUserDao {
         try {
             conn = ConnectionFactory.getConnection();
             stmt = conn.prepareStatement("SELECT id, user_name, user_email FROM users WHERE id = ?");
-            stmt.setLong(1, id);
             rs = stmt.executeQuery();
-            // here was user = null;
-            User user = new User();
+            //User user = null;
             if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getLong(1));
+                user.setUserName(rs.getString(2));
+                user.setUserMail(rs.getString(3));
 
+                users.add(user);
 
-                user.setUserId(rs.getLong("userId"));
-                user.setUserName(rs.getString("userName"));
-                user.setUserMail(rs.getString("userMail"));
+                // users.add(processRow(rs));
+
             }
-            return user;
+            return users.iterator().next();
         } catch (SQLException e) {
             e.getMessage();
         } finally {
@@ -121,7 +146,7 @@ public class UserDaoImpl implements IUserDao {
             }
         }
 
-        return null;
+        return users;
     }
 
     @Override

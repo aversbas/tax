@@ -1,5 +1,6 @@
 package servlet;
 
+import dao.PersistException;
 import dao.daoImpl.*;
 import dao.idao.*;
 import entyties.*;
@@ -44,7 +45,12 @@ public class BookingServlet extends HttpServlet {
         req.setAttribute("userName", userName);
         log.info("username booking: " + userName);
 
-        List<Taxi> taxis = taxiDao.getAllAvailableCars();
+        List<Taxi> taxis = null;
+        try {
+            taxis = taxiDao.getAllCars();
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
         req.setAttribute("taxis", taxis);
 
         HttpSession session = req.getSession();
@@ -84,12 +90,18 @@ public class BookingServlet extends HttpServlet {
         String home = req.getParameter("startAddress");
         String dest = req.getParameter("endAddress");
         //TODO if there are no available cars don't allow booking
-        String car = req.getParameter("carClass");
+        String car = req.getParameter("class");
 //        if(car.length() != 0){
 //        work here booking
 //        }
         //Get available car
-        final Taxi taxi = taxiDao.getCarByCarType(car);
+        Taxi taxi = null;
+        try {
+            taxis = taxiDao.getAllCars();
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
+        req.setAttribute("taxis", taxis);
         //Get streets home and dest
         Street homeStreet = new Street(home);
         homeStreet.setId((long) streetDao.getStreetIdByName(home));
@@ -113,7 +125,12 @@ public class BookingServlet extends HttpServlet {
         // add Action for user
         Action action = actionDao.getUserAction(user);
         //get right userAction
-        UserAction userAction = userActionDao.getUserActionByAction(action);
+        UserAction userAction = null;
+        try {
+            userAction = userActionDao.getUserActionByAction(action);
+        } catch (PersistException e) {
+            e.printStackTrace();
+        }
         log.info(userAction.toString());
         //get user discount
 
@@ -151,6 +168,7 @@ public class BookingServlet extends HttpServlet {
         taxi.setIs_free(false);
         taxiDao.setCarBusy(taxi);
         taxiDao.changeCurrentPos(taxi, destStreet);
+        Taxi finalTaxi = taxi;
         Thread t = new Thread(new Runnable() {
             public void run() {
                 synchronized (this) {
@@ -159,7 +177,7 @@ public class BookingServlet extends HttpServlet {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    taxiDao.setCarFree(taxi);
+                    taxiDao.setCarFree(finalTaxi);
                 }
             }
         });
