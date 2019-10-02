@@ -18,6 +18,9 @@ public class Taxi implements Identified<Integer> {
         this.is_free = is_free;
     }
 
+    public Taxi(String car) {
+    }
+
     @Override
     public Long getId() {
         return id;

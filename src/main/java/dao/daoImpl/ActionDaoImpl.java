@@ -22,11 +22,15 @@ public class ActionDaoImpl implements IActionDao {
     public void addNewAction(Action action) {
         Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             conn = ConnectionFactory.getConnection();
             stmt = conn.prepareStatement("INSERT INTO action (discount) value ?");
-            stmt.setDouble(1, 0);
-            stmt.executeUpdate();
+            if (rs != null && rs.next()) {
+                stmt.setDouble(1, 0);
+                stmt.executeUpdate();
+            }
+
             log.info("action added successfully");
 
         } catch (SQLException e) {
@@ -62,8 +66,8 @@ public class ActionDaoImpl implements IActionDao {
         try {
             conn = ConnectionFactory.getConnection();
             stmt = conn.prepareStatement("UPDATE action set discount=? where id=?");
-            stmt.setDouble(1, lastSum+sum);
-            stmt.setLong(2, user.getId());
+            stmt.setLong(1, user.getId());
+            stmt.setDouble(2, lastSum+sum);
             stmt.executeUpdate();
 
 
@@ -114,8 +118,8 @@ public class ActionDaoImpl implements IActionDao {
             rs = stmt.executeQuery();
             Action action = new Action();
             if (rs.next()) {
-                action.setId(rs.getLong(2));
-                action.setDiscount(rs.getDouble(1));
+                action.setId(rs.getLong(1));
+                action.setDiscount(rs.getDouble(2));
             }
             return action;
         } catch (SQLException e) {

@@ -76,4 +76,17 @@ public class Booking {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "id=" + id +
+                ", user=" + user +
+                ", startAddress=" + startAddress +
+                ", endAddress=" + endAddress +
+                ", taxi=" + taxi +
+                ", action=" + action +
+                ", price=" + price +
+                '}';
+    }
 }

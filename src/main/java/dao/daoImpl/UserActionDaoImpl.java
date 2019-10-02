@@ -52,14 +52,15 @@ public class UserActionDaoImpl implements IUserActionDao {
 
     }
 
-    public UserAction getUserActionByAction(Action action)throws PersistException {
+    public UserAction getUserActionByAction(Action action) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
             conn = ConnectionFactory.getConnection();
             stmt = conn.prepareStatement("SELECT * FROM user_action WHERE action_id=?");
-            stmt.setLong(1, action.getId());
+//            stmt.setLong(1, action.getId());
+            stmt.getResultSet();
             rs = stmt.executeQuery();
             User user;
             UserAction userAction = new UserAction();
@@ -68,11 +69,13 @@ public class UserActionDaoImpl implements IUserActionDao {
                 user = userDao.getUserById(rs.getInt(3));
                 userAction.setAction(action);
                 userAction.setUser(user);
-                // action.setDiscount(rs.getInt(1));
+                 action.setDiscount(rs.getDouble(2));
             }
             return userAction;
         } catch (SQLException e) {
             e.getMessage();
+        } catch (PersistException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {

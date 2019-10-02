@@ -11,9 +11,9 @@ import java.util.List;
 public interface IUserDao {
     User getUserById(long id) throws PersistException;
     List<User> getAllUsers();
-    void save(User user);
+    long save(User user);
     void update(User user);
     void delete(User user);
     boolean getUserByUserNameAndPassword(String userName, String password);
-    int getIdByUserName(String name);
+    long getIdByUserName(String name);
 }

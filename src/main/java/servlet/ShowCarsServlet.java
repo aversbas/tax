@@ -1,6 +1,5 @@
 package servlet;
 
-import dao.PersistException;
 import dao.daoImpl.TaxiDaoImpl;
 import dao.idao.ITaxiDao;
 import entyties.Taxi;
@@ -24,12 +23,8 @@ public class ShowCarsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Taxi> taxis = null;
-        try {
-            taxis = taxiDao.getAllCars();
-        } catch (PersistException e) {
-            e.printStackTrace();
-        }
+        List<Taxi> taxis = taxiDao.getAllCars();
+
         req.setAttribute("taxis", taxis);
         RequestDispatcher rd = req.getRequestDispatcher("/showcars.jsp");
         rd.forward(req, resp);

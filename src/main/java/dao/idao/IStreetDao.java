@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IStreetDao {
     Street getById(long id);
-    int getStreetIdByName(String name);
+    Long getStreetIdByName(String name);
     List<Street> getAllStreets();
     void save (Street street);
     void update (Street street);

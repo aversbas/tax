@@ -65,8 +65,8 @@ public class StreetDaoImpl implements IStreetDao {
     }
 
     @Override
-    public int getStreetIdByName(String name) {
-        int id = 0;
+    public Long getStreetIdByName(String name) {
+        long id = 0;
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;

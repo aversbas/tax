@@ -27,7 +27,7 @@ public class HomeServlet extends HttpServlet {
     IStreetDao streetDao = new StreetDaoImpl();
     ITaxiDao taxiDao = new TaxiDaoImpl();
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher("/home.jsp");
         rd.forward(req, resp);
         // comment top 2 strings
@@ -45,7 +45,7 @@ public class HomeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher rd = req.getRequestDispatcher("/home.jsp");
         rd.forward(req, resp);
 

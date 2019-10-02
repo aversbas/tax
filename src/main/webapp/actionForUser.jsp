@@ -13,12 +13,25 @@
 <html>
 <head>
     <title>Your Actions</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<a href="${pageContext.request.contextPath}/home">Back</a>
-Your action account: ${action} ₴ available for discount
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home">Back</a></li>
+        </ol>
+    </nav>
 
-<p>If your wasted total sum is more than 20 then your discount will automaticly be used for new booking,
-    else you will just be collecting money for discount</p>
+    <p class="h4">
+        <span class="badge badge-secondary">Your action account:</span> ${action} ₴ available for discount
+    </p>
+
+    <p>If your wasted total sum is more than 20 then your discount will automaticly be used for new booking,
+        else you will just be collecting money for discount</p>
+</div>
+
 </body>
 </html>

@@ -13,20 +13,22 @@
 <html>
 <head>
     <title>Home</title>
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/normalize.css" />
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/demo.css" />
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/component.css" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-
-//<fmt:message key="hello"/>${param.userName}
-<section class="color-0">
-    <nav class="cl-effect-1">
-        <a href="${pageContext.request.contextPath}/booking">Book a taxi</a>
-        <a href="${pageContext.request.contextPath}/actions">Check my actions</a>
-        <a href="${pageContext.request.contextPath}/cars">types of taxis</a>
-        <a href="${pageContext.request.contextPath}/login">Exit</a>
+<div class="container">
+    //<fmt:message key="hello"/>${param.userName}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/booking">Book a taxi</a></li>
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/actions">Check my actions</a></li>
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/cars">types of cars</a></li>
+            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/login">Exit</a></li>
+        </ol>
     </nav>
-</section>
+</div>
+
 </body>
 </html>

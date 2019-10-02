@@ -25,7 +25,6 @@ public class TaxiDaoImpl implements ITaxiDao {
 
     public String getSelectQuery() {return "SELECT * FROM taxi";}
 
-    @Override
     public List<Taxi> parseResultSet(ResultSet rs) throws PersistException {
         Street street = new Street();
         LinkedList<Taxi> result = new LinkedList<>();
@@ -49,12 +48,12 @@ public class TaxiDaoImpl implements ITaxiDao {
     }
 
     @Override
-    public List<Taxi> getAllCars() throws PersistException {
+    public List<Taxi> getAllCars()  {
 
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Taxi> list;
+        List<Taxi> list = null;
         String sql = getSelectQuery();
         try {
             conn = ConnectionFactory.getConnection();
@@ -62,7 +61,7 @@ public class TaxiDaoImpl implements ITaxiDao {
             rs = stmt.executeQuery(sql);
             list = parseResultSet(rs);
         } catch (Exception e) {
-            throw new PersistException(e);
+            System.out.println(e.getMessage());
         }
         return list;
 
@@ -197,11 +196,7 @@ public class TaxiDaoImpl implements ITaxiDao {
             rs = stmt.executeQuery(sql);
             list = parseResultSet(rs);
         } catch (Exception e) {
-            try {
-                throw new PersistException(e);
-            } catch (PersistException e1) {
-                e1.printStackTrace();
-            }
+            System.out.println(e.getMessage());
         }
        return list.iterator().next();
     }

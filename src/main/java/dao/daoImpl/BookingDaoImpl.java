@@ -27,22 +27,23 @@ public class BookingDaoImpl implements IBookingDao {
 
     @Override
     public void book(Booking booking) {
-        long user = booking.getUser().getId();
-        long startAddress = booking.getStartAddress().getId();
-        long endAddress = booking.getEndAddress().getId();
-        long taxi = booking.getTaxi().getId();
-        long action = booking.getAction().getId();
+        User user = booking.getUser();
+        Street startAddress = booking.getStartAddress();
+        Street endAddress = booking.getEndAddress();
+        Taxi taxi = booking.getTaxi();
+        UserAction action = booking.getAction();
         double price = booking.getPrice();
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
+            log.info("before book block");
             conn = ConnectionFactory.getConnection();
             stmt = conn.prepareStatement("INSERT INTO booking (user, start_address, end_address, action, taxi, price) VALUES (?,?,?,?,?,?)");
-            stmt.setLong(1, user);
-            stmt.setLong(2, startAddress);
-            stmt.setLong(3, endAddress);
-            stmt.setLong(4, action);
-            stmt.setLong(5, taxi);
+            stmt.setObject(1, user);
+            stmt.setObject(2, startAddress);
+            stmt.setObject(3, endAddress);
+            stmt.setObject(4, action);
+            stmt.setObject(5, taxi);
             stmt.setDouble(6, price);
             stmt.executeUpdate();
             System.out.println("user saved");
@@ -98,7 +99,7 @@ public class BookingDaoImpl implements IBookingDao {
                 Street endAddress = streetDao.getById(dest);
 
                 Action action = actionDao.getUserAction(user);
-                int actionId = rs.getInt(5);
+                int actionId = rs.getInt(6);
 
                 UserAction userAction = null;
                 try {
@@ -106,7 +107,7 @@ public class BookingDaoImpl implements IBookingDao {
                 } catch (PersistException e) {
                     e.printStackTrace();
                 }
-                int carId = rs.getInt(6);
+                int carId = rs.getInt(5);
 
                 Taxi taxi = carDao.getCarById(carId);
                 double price = rs.getDouble(7);

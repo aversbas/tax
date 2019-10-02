@@ -19,7 +19,7 @@ public class TaxiRideDaoImpl implements ITaxiRideDao {
 
         double km = 0;
         long startId = startAddress.getId();
-        long destId = endAddress.getId() - 1;
+        long destId = endAddress.getId();
         long temp = 0;
 
         if (destId < startId) {
@@ -44,7 +44,7 @@ public class TaxiRideDaoImpl implements ITaxiRideDao {
             rs = stmt.executeQuery();
 
             if (rs.next()) {
-                km = rs.getDouble(3);
+                km = rs.getDouble(4);
             }
             return km;
         } catch (SQLException e) {

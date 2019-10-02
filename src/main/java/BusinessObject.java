@@ -1,4 +1,5 @@
-import dao.daoImpl.UserDaoImpl;
+import dao.daoImpl.UserActionDaoImpl;
+import entyties.Action;
 import entyties.TaxiRide;
 import mysql.MySqlDaoFactory;
 
@@ -36,14 +37,13 @@ public class BusinessObject {
 //        System.out.println(streetDao.getStreetIdByName("Shuseva"));
 //        UserDaoImpl userDao = new UserDaoImpl();
 //        userDao.getAllUsers().forEach(System.out :: println);
-//        Action action = new Action();
-//
-//        UserActionDaoImpl userActionDao = new UserActionDaoImpl();
-//        System.out.println(userActionDao.getUserActionByAction(action));
+        Action action = new Action();
 
-        UserDaoImpl userDao = new UserDaoImpl();
-        System.out.println(userDao.getUserById(2));
+        UserActionDaoImpl userActionDao = new UserActionDaoImpl();
+        System.out.println(userActionDao.getUserActionByAction(action));
 
+//        UserDaoImpl userDao = new UserDaoImpl();
+//        System.out.println(userDao.getUserById(2));
     }
 
 

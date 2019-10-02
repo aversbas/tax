@@ -1,8 +1,7 @@
 package dao;
 
-import java.sql.PreparedStatement;
-
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 
@@ -11,7 +10,13 @@ import java.util.List;
  */
 public abstract class DAOFactory<T extends Identified<PK>, PK extends Integer> implements GenericDao<T, PK> {
 
-    private Connection connection = ConnectionPool.getInstance().getConnection();
+    Connection connection = ConnectionPool.getInstance().getConnection();
+
+    public DAOFactory(Connection connection) {
+    }
+
+    protected DAOFactory() {
+    }
 
     /**
      * Возвращает sql запрос для получения всех записей.
@@ -26,6 +31,7 @@ public abstract class DAOFactory<T extends Identified<PK>, PK extends Integer> i
      * INSERT INTO [Table] ([column, column, ...]) VALUES (?, ?, ...);
      */
     public abstract String getCreateQuery();
+
 
     /**
      * Возвращает sql запрос для обновления записи.
