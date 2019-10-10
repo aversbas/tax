@@ -1,12 +1,12 @@
 package dao.daoImpl;
 
-import dao.ConnectionFactory;
-import dao.PersistException;
+import dao.util.ConnectionFactory;
 import dao.idao.IUserActionDao;
 import dao.idao.IUserDao;
 import entyties.Action;
 import entyties.User;
 import entyties.UserAction;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,88 +18,49 @@ import java.sql.SQLException;
  */
 public class UserActionDaoImpl implements IUserActionDao {
 
+    Logger log = Logger.getLogger(UserActionDaoImpl.class);
+
     IUserDao userDao = new UserDaoImpl();
 
     public void createnewUserAction(Action action) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("INSERT INTO user_action (user_id, action_id) VALUES (?, ?)");
+
+        String sql = "INSERT INTO user_action (user_id, action_id) VALUES (?, ?)";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, action.getId());
             stmt.setLong(2, action.getId());
             stmt.executeUpdate();
 
 
         } catch (SQLException e) {
-            e.getMessage();
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
+            log.error(e);
         }
-
     }
 
     public UserAction getUserActionByAction(Action action) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+
+        String sql = "SELECT * FROM user_action WHERE action_id=?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM user_action WHERE action_id=?");
-//            stmt.setLong(1, action.getId());
-            stmt.getResultSet();
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setLong(1, action.getId());
             rs = stmt.executeQuery();
+
             User user;
             UserAction userAction = new UserAction();
             if (rs.next()) {
                 userAction.setId(rs.getLong(1));
-                user = userDao.getUserById(rs.getInt(3));
+                user = userDao.getUserById(rs.getInt(4));
                 userAction.setAction(action);
                 userAction.setUser(user);
-                 action.setDiscount(rs.getDouble(2));
+                action.setDiscount(rs.getDouble(1));
             }
             return userAction;
         } catch (SQLException e) {
-            e.getMessage();
-        } catch (PersistException e) {
+            log.error(e);
+        } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
         }
-
         return null;
     }
 }

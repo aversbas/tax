@@ -3,12 +3,29 @@ package dao.idao;
 import entyties.Action;
 import entyties.User;
 
-/**
- * Created by alexm on 20.09.2019.
- */
 public interface IActionDao {
+    /**
+     * @param user
+     * @return
+     */
     Action getUserAction(User user);
+
+    /**
+     * @param user
+     * @param action
+     * @param sum
+     */
     void addSumToAction(User user, Action action, double sum);
+
+    /**
+     * @param user
+     * @param action
+     * @param sum
+     */
     void takeSumFromAction(User user, Action action, double sum);
+
+    /**
+     * @param action
+     */
     void addNewAction(Action action);
 }

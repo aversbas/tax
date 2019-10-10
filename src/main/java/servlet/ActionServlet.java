@@ -21,14 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * Created by alexm on 21.09.2019.
- */
-
 @WebServlet("/actions")
 public class ActionServlet extends HttpServlet {
-    IActionDao actionDao = new ActionDaoImpl();
-    IUserDao userDao = new UserDaoImpl();
+    private IActionDao actionDao = new ActionDaoImpl();
+    private IUserDao userDao = new UserDaoImpl();
     IUserActionDao userActionDao = new UserActionDaoImpl();
 
     @Override
@@ -39,7 +35,7 @@ public class ActionServlet extends HttpServlet {
 
         User user = new User();
         user.setUserName(userName);
-        user.setUserId((long) userDao.getIdByUserName(userName));
+        user.setUserId(userDao.getIdByUserName(userName));
 
         Action action = actionDao.getUserAction(user);
         req.setAttribute("action", action.getDiscount());

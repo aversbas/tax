@@ -23,7 +23,7 @@ public class ShowCarsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<Taxi> taxis = taxiDao.getAllCars();
+        List<Taxi> taxis = taxiDao.getAllAvailableCars();
 
         req.setAttribute("taxis", taxis);
         RequestDispatcher rd = req.getRequestDispatcher("/showcars.jsp");

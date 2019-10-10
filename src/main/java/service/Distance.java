@@ -1,4 +1,4 @@
-package service.taxi_rise;
+package service;
 
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;

@@ -1,8 +1,6 @@
 package entyties;
 
-import dao.Identified;
-
-public class Taxi implements Identified<Integer> {
+public class Taxi  {
 
     private long id;
     private String carClass;
@@ -21,7 +19,6 @@ public class Taxi implements Identified<Integer> {
     public Taxi(String car) {
     }
 
-    @Override
     public Long getId() {
         return id;
     }

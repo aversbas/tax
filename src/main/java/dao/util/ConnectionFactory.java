@@ -1,4 +1,4 @@
-package dao;
+package dao.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,7 +17,6 @@ public class ConnectionFactory {
         try{
 
 
-            //Class.forName("com.mysql.jdbc.Driver");
             Class.forName("com.mysql.jdbc.Driver");
 
             connection = DriverManager.getConnection(url, user, password);

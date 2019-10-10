@@ -1,7 +1,6 @@
 package dao.daoImpl;
 
-import dao.ConnectionFactory;
-import dao.PersistException;
+import dao.util.ConnectionFactory;
 import dao.idao.*;
 import entyties.*;
 import org.apache.log4j.Logger;
@@ -13,9 +12,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by alexm on 20.09.2019.
- */
 public class BookingDaoImpl implements IBookingDao {
 
     Logger log = Logger.getLogger(BookingDaoImpl.class);
@@ -27,47 +23,28 @@ public class BookingDaoImpl implements IBookingDao {
 
     @Override
     public void book(Booking booking) {
-        User user = booking.getUser();
-        Street startAddress = booking.getStartAddress();
-        Street endAddress = booking.getEndAddress();
-        Taxi taxi = booking.getTaxi();
-        UserAction action = booking.getAction();
+
+        long userId = booking.getUser().getId();
+        long home = booking.getStartAddress().getId();
+        long dest = booking.getEndAddress().getId();
+        long car = booking.getTaxi().getId();
+        long action = booking.getAction().getId();
         double price = booking.getPrice();
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        try {
-            log.info("before book block");
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("INSERT INTO booking (user, start_address, end_address, action, taxi, price) VALUES (?,?,?,?,?,?)");
-            stmt.setObject(1, user);
-            stmt.setObject(2, startAddress);
-            stmt.setObject(3, endAddress);
-            stmt.setObject(4, action);
-            stmt.setObject(5, taxi);
+
+        String sql = "INSERT INTO booking (user,start_address, end_address, action, taxi, price) VALUES (?,?,?,?,?,?)";
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, userId);
+            stmt.setLong(2, home);
+            stmt.setLong(3, dest);
+            stmt.setLong(4, car);
+            stmt.setLong(5, action);
             stmt.setDouble(6, price);
             stmt.executeUpdate();
-            System.out.println("user saved");
+            log.info("user saved");
             log.info("BookingDaoImpl: booked successfully");
         }catch (SQLException e){
-            e.getMessage();
-        }
-        finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    log.error("Cannot book" + e.getMessage());
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    log.error("Connection exception: " + e.getMessage());
-                    e.getMessage();
-                }
-            }
+            log.error(e);
         }
     }
 
@@ -79,12 +56,10 @@ public class BookingDaoImpl implements IBookingDao {
     @Override
     public List<Booking> getAllBookings(User user) {
         List<Booking> bookingList = new ArrayList<Booking>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM booking WHERE user=?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM booking where id=?");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1,user.getId());
             rs = stmt.executeQuery();
             while (rs.next()) {
@@ -101,15 +76,11 @@ public class BookingDaoImpl implements IBookingDao {
                 Action action = actionDao.getUserAction(user);
                 int actionId = rs.getInt(6);
 
-                UserAction userAction = null;
-                try {
-                    userAction = userActionDao.getUserActionByAction(action);
-                } catch (PersistException e) {
-                    e.printStackTrace();
-                }
-                int carId = rs.getInt(5);
+                UserAction userAction = userActionDao.getUserActionByAction(action);
 
+                int carId = rs.getInt(5);
                 Taxi taxi = carDao.getCarById(carId);
+
                 double price = rs.getDouble(7);
                 //build booking
                 booking.setId(id);
@@ -126,35 +97,13 @@ public class BookingDaoImpl implements IBookingDao {
             return bookingList;
         } catch (SQLException e) {
             e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
         }
-
-        return null;
+        return bookingList;
     }
 
     @Override
     public Booking getBooking(int id) {
         return null;
     }
+
 }

@@ -1,8 +1,9 @@
 package dao.daoImpl;
 
-import dao.ConnectionFactory;
+import dao.util.ConnectionFactory;
 import dao.idao.IStreetDao;
 import entyties.Street;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,22 +12,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by alexm on 20.09.2019.
- */
 public class StreetDaoImpl implements IStreetDao {
+    Logger log = Logger.getLogger(StreetDaoImpl.class);
 
     @Override
     public Street getById(long id) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+
+        String sql = "SELECT * FROM streets WHERE id=?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM streets WHERE id=?");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, id);
             rs = stmt.executeQuery();
-            //Street street = null;
             if (rs.next()) {
                 Street street = new Street();
                 street.setId(rs.getLong(1));
@@ -36,43 +33,18 @@ public class StreetDaoImpl implements IStreetDao {
             }
             return null;
         } catch (SQLException e) {
-            e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
+            log.error(e);
         }
-
         return null;
     }
 
     @Override
     public Long getStreetIdByName(String name) {
         long id = 0;
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM streets WHERE streetName=?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM streets WHERE streetName=?");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, name);
             rs = stmt.executeQuery();
 
@@ -81,29 +53,7 @@ public class StreetDaoImpl implements IStreetDao {
             }
             return id;
         } catch (SQLException e) {
-            e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
+            log.error(e);
         }
         return id;
     }
@@ -111,12 +61,10 @@ public class StreetDaoImpl implements IStreetDao {
     @Override
     public List<Street> getAllStreets() {
         List<Street> streets = new ArrayList<Street>();
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "SELECT * FROM streets";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM streets");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             rs = stmt.executeQuery();
             Street street = new Street();
             while (rs.next()) {
@@ -124,37 +72,14 @@ public class StreetDaoImpl implements IStreetDao {
                 String name = rs.getString(2);
                 Street st = new Street(name);
                 st.setId(id);
-//                street.setId(rs.getInt(1));
-//                street.setName(rs.getString(2));
+                street.setId(rs.getLong(1));
+                street.setName(rs.getString(2));
                 streets.add(st);
             }
             return streets;
         } catch (SQLException e) {
-            e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
+            log.error(e);
         }
-
         return null;
     }
 

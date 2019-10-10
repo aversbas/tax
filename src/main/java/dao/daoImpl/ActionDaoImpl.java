@@ -1,6 +1,6 @@
 package dao.daoImpl;
 
-import dao.ConnectionFactory;
+import dao.util.ConnectionFactory;
 import dao.idao.IActionDao;
 import entyties.Action;
 import entyties.User;
@@ -20,82 +20,33 @@ public class ActionDaoImpl implements IActionDao {
 
     @Override
     public void addNewAction(Action action) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "INSERT INTO action (discount) VALUE (?)";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("INSERT INTO action (discount) value ?");
-            if (rs != null && rs.next()) {
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
+
                 stmt.setDouble(1, 0);
                 stmt.executeUpdate();
-            }
 
             log.info("action added successfully");
 
         } catch (SQLException e) {
             log.error("cannot add action: " + e.getMessage());
-            e.getMessage();
-        } finally {
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    log.error("stmt error: " + e.getMessage());
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    log.error("connection error: " + e.getMessage());
-                    log.info("");
-                    e.getMessage();
-                }
-            }
         }
     }
 
     @Override
     public void addSumToAction(User user, Action action, double sum) {
         double lastSum = getUserAction(user).getDiscount();
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "UPDATE action set discount=? where id=?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("UPDATE action set discount=? where id=?");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, user.getId());
             stmt.setDouble(2, lastSum+sum);
             stmt.executeUpdate();
-
-
-
         } catch (SQLException e) {
             e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
         }
     }
 
@@ -106,46 +57,22 @@ public class ActionDaoImpl implements IActionDao {
 
     @Override
     public Action getUserAction(User user) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
+        String sql = "SELECT action.discount,action.userId " +
+                     "FROM action JOIN user_action ua on action.id = ua.action_id " +
+                     "JOIN users on ua.user_id = users.id WHERE ua.user_id = ?";
         ResultSet rs = null;
-        try {
-            conn = ConnectionFactory.getConnection();
-            stmt = conn.prepareStatement("SELECT discount,userId  " +
-                    "from action join user_action ua on action.id = ua.action_id " +
-                    "join users on ua.user_id = users.id where ua.user_id = ?;");
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setLong(1, user.getId());
             rs = stmt.executeQuery();
             Action action = new Action();
             if (rs.next()) {
-                action.setId(rs.getLong(1));
-                action.setDiscount(rs.getDouble(2));
+                action.setDiscount(rs.getDouble(1));
+                action.setId(rs.getLong(2));
             }
             return action;
         } catch (SQLException e) {
             e.getMessage();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (stmt != null) {
-                try {
-                    stmt.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                    e.getMessage();
-                }
-            }
         }
         return null;
     }

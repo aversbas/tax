@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="cars">Select type of car you want</label>
+                            <label for="car">Select type of car you want</label>
                             <%--<select name="cars" id="cars">--%>
                             <%--    <c:forEach var="car" items="${carList}">--%>
                             <%--        <option><c:out value="${car.class}"/></option>--%>
@@ -83,12 +83,11 @@
                     </p>
                     <p class="h4">
                         <span class="badge badge-secondary">Your last bookings:</span>
-                        <%--<c:forEach var="booking" items="${bookingList}">--%>
-                        <%--   <c:out value="${booking.startAddress.name}"/>--%>
-                        <%--    <c:out value="${booking.endAddress.name}"/>--%>
-                        <%--    <c:out value="${booking.taxi.carClass}"/>--%>
-                        <%--</c:forEach>--%>
-                        <%--ТУТ БУЛИ ДІВИ--%>
+                        <c:forEach var="booking" items="${bookingList}">
+                           <c:out value="${booking.startAddress.name}"/>
+                            <c:out value="${booking.endAddress.name}"/>
+                            <c:out value="${booking.taxi.carClass}"/>
+                        </c:forEach>
                     </p>
                 </div>
                 <div class="container">
@@ -104,7 +103,7 @@
                             <tr>
                                 <td><c:out value="${booking.startAddress.name}"/></td/>
                                 <td><c:out value="${booking.endAddress.name}"/></td>
-                                <td><c:out value="${booking.taxi.carType}"/></td>
+                                <td><c:out value="${booking.taxi.carClass}"/></td>
                             </tr>
                         </c:forEach>
                     </table>

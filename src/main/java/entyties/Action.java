@@ -2,11 +2,10 @@ package entyties;
 
 public class Action {
 
-    public Action() {
-    }
-
     private Long id;
     private Double discount;
+    public Action() {
+    }
 
     public Long getId() {
         return id;

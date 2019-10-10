@@ -1,6 +1,5 @@
 package servlet;
 
-import dao.PersistException;
 import dao.daoImpl.*;
 import dao.idao.*;
 import entyties.*;
@@ -24,7 +23,7 @@ public class BookingServlet extends HttpServlet {
 
     Logger log = Logger.getLogger(BookingServlet.class);
     private final double timeFor1KM = 2.5;
-    private final double priceFor1KM = 11;
+    private final double priceFor1KM = 11.0;
     private final double minDiscountValue = 1;
     private IUserDao userDao = new UserDaoImpl();
     private IStreetDao streetDao = new StreetDaoImpl();
@@ -70,7 +69,6 @@ public class BookingServlet extends HttpServlet {
         List<Taxi> taxis = taxiDao.getAllCars();
         req.setAttribute("taxis", taxis);
 
-        //userName isn't working here
         String userName = req.getParameter("userName");
         req.setAttribute("userName", userName);
         System.out.println("username booking: " + userName);
@@ -85,15 +83,10 @@ public class BookingServlet extends HttpServlet {
 
         String home = req.getParameter("home");
         String dest = req.getParameter("dest");
-        //TODO if there are no available cars don't allow booking
         String car = req.getParameter("car");
-//        if(car.length() != 0){
-//        work here booking
-//        }
-        //Get available car
-//        Taxi taxi = taxiDao.getCarByCarType(car);
+
         Taxi taxi = new Taxi(car);
-        //Get streets home and dest
+        taxi.setId(taxiDao.getCarByCarType(car).getId());
         Street homeStreet = new Street(home);
         homeStreet.setId(streetDao.getStreetIdByName(home));
         Street destStreet = new Street(dest);
@@ -102,26 +95,27 @@ public class BookingServlet extends HttpServlet {
         log.info(home);
         log.info(dest);
         log.info(car);
-        System.out.println("home street id = " + homeStreet.toString());
-        System.out.println("dest street id = " + destStreet.toString());
-        //get sum km of way
-        double km = wayDao.getSumKm(homeStreet, destStreet);
+        log.info("home street id = " + homeStreet.toString());
+        log.info("dest street id = " + destStreet.toString());
 
-        System.out.println(km + "km");
-        System.out.println("USER DETAILS: " + user.toString());
+        //get sum km of way
+        log.info(wayDao.getSumKm(homeStreet, destStreet));
+        double km = wayDao.getSumKm(homeStreet, destStreet);
+        log.info(km);
+
+        log.debug(km + "km");
+        log.debug("USER DETAILS: " + user.toString());
         //TODO (sum of km is calculated right,
         // need to calculate the price and wait
         // and book booking
         // and set taxi to not free and after some time to free
         // add Action for user
         Action action = actionDao.getUserAction(user);
+        log.info("Action details: " + action.toString());
         //get right userAction
-        UserAction userAction = null;
-        try {
-            userAction = userActionDao.getUserActionByAction(action);
-        } catch (PersistException e) {
-            e.printStackTrace();
-        }
+        UserAction userAction = userActionDao.getUserActionByAction(action);
+        log.info("UserAction details: " + userAction.toString());
+
 //        System.out.println(userAction.toString());
         //get user discount
 
@@ -129,24 +123,25 @@ public class BookingServlet extends HttpServlet {
         //get id's streets and sum(km) and price and maybe coef and time arrival
         //book a taxi and after some time of booking set isFree taxi = true;
         //Get price
+
         double price = km * priceFor1KM;
-        if (action.getDiscount() >= minDiscountValue) {
+        log.info(price);
+        if (action.getDiscount() > minDiscountValue) {
             price = price - action.getDiscount();
         } else {
             actionDao.addSumToAction(user, action, price % 10);
         }
-        System.out.println("price before discount is: " + price);
+        log.info("price before discount is: " + price);
         // price = km * 11 - action.getDiscount();
-        System.out.println("PRICE AFTER DISCOUNT: " + price);
-        System.out.println("Taxi Details: " + taxi.toString());
+        log.info("PRICE AFTER DISCOUNT: " + price);
+        log.info("Taxi Details: " + taxi.toString());
         //WAITING TIME
-        final double waitTime = wayDao.getSumKm(homeStreet, taxi.getCurr_pos()) * timeFor1KM;
+        final double waitTime = wayDao.getSumKm(homeStreet, destStreet) * timeFor1KM;
         int time = (int) waitTime;
         //waiting ride time
         double rideTime = km * 5;
         req.setAttribute("waitingTime", time);
-        System.out.println("Wait time for your car is: " + waitTime + " min");
-        //Booking handling
+        log.info("Wait time for your car is: " + waitTime + " min");
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setStartAddress(homeStreet);
@@ -155,11 +150,12 @@ public class BookingServlet extends HttpServlet {
         booking.setAction(userAction);
         booking.setPrice(price);
         bookingDao.book(booking);
+
         //set car is not free, change car position, in time set car to free
         taxi.setIs_free(false);
         taxiDao.setCarBusy(taxi);
         taxiDao.changeCurrentPos(taxi, destStreet);
-        Taxi finalTaxi = taxi;
+
         Thread t = new Thread(new Runnable() {
             public void run() {
                 synchronized (this) {
@@ -168,16 +164,17 @@ public class BookingServlet extends HttpServlet {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    taxiDao.setCarFree(finalTaxi);
+                    taxiDao.setCarFree(taxi);
                 }
             }
         });
         t.start();
-        //taxiDao.setCarFree(taxi);
+//        taxiDao.setCarFree(taxi);
 
 
         List<Booking> bookingList = bookingDao.getAllBookings(user);
         req.setAttribute("bookingList", bookingList);
+        log.info("bookingList success done: " + bookingList);
 
         RequestDispatcher rd = req.getRequestDispatcher("/bookingtaxi.jsp");
         rd.forward(req, resp);

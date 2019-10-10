@@ -1,8 +1,6 @@
 package entyties;
 
-import dao.Identified;
-
-public class User implements Identified<Integer> {
+public class User {
 
   private Long userId;
   private String userName;
@@ -18,7 +16,6 @@ public class User implements Identified<Integer> {
   public User() {
   }
 
-  @Override
   public Long getId() {
     return userId;
   }

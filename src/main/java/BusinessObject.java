@@ -1,7 +1,4 @@
-import dao.daoImpl.UserActionDaoImpl;
-import entyties.Action;
 import entyties.TaxiRide;
-import mysql.MySqlDaoFactory;
 
 /**
  * Created by alexm on 09.08.2019.
@@ -10,7 +7,6 @@ public class BusinessObject {
 
     public static void main(String[] args) throws Exception {
 
-        MySqlDaoFactory mySqlDaoFactory = new MySqlDaoFactory();
         TaxiRide taxiRide;
 //
 //        MySQLCarDAO mySQLCarDAO = new MySQLCarDAO(mySqlDaoFactory.getContext());
@@ -37,10 +33,10 @@ public class BusinessObject {
 //        System.out.println(streetDao.getStreetIdByName("Shuseva"));
 //        UserDaoImpl userDao = new UserDaoImpl();
 //        userDao.getAllUsers().forEach(System.out :: println);
-        Action action = new Action();
-
-        UserActionDaoImpl userActionDao = new UserActionDaoImpl();
-        System.out.println(userActionDao.getUserActionByAction(action));
+//        Action action = new Action();
+//
+//        UserActionDaoImpl userActionDao = new UserActionDaoImpl();
+//        System.out.println(userActionDao.getUserActionByAction(action))
 
 //        UserDaoImpl userDao = new UserDaoImpl();
 //        System.out.println(userDao.getUserById(2));

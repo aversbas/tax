@@ -21,7 +21,7 @@
 <div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home">Back</a></li>
+            <li class="breadcrumb-item">${sessionScope.get("user")}<a href="${pageContext.request.contextPath}/home">Back</a></li>
         </ol>
     </nav>
 

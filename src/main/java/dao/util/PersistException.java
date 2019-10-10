@@ -1,4 +1,4 @@
-package dao;
+package dao.util;
 
 /**
  * Created by alexm on 12.08.2019.

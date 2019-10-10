@@ -19,7 +19,7 @@
 </head>
 <body>
 <div class="container">
-    //<fmt:message key="hello"/>${param.userName}
+    //<fmt:message key="hello"/>${sessionScope.get("user")}${param.userName}
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/booking">Book a taxi</a></li>

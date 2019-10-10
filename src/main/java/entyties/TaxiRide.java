@@ -1,8 +1,6 @@
 package entyties;
 
-import dao.Identified;
-
-public class TaxiRide implements Identified<Integer> {
+public class TaxiRide {
 
   private Long id;
   private Street startAddress;
@@ -20,7 +18,6 @@ public class TaxiRide implements Identified<Integer> {
     this.coef = coef;
   }
 
-  @Override
   public Long getId() {
     return id;
   }

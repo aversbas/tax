@@ -1,8 +1,6 @@
 package entyties;
 
-import dao.Identified;
-
-public class Street implements Identified {
+public class Street  {
     private Long id;
     private String name;
 
@@ -13,7 +11,6 @@ public class Street implements Identified {
         this.name = name;
     }
 
-    @Override
     public Long getId() {
         return id;
     }

@@ -1,4 +1,4 @@
-package service.taxi_rise;
+package service;
 
 import entyties.TaxiRide;
 
